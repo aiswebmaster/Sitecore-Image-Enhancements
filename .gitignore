@@ -1,0 +1,15 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ImageOptimization
+/.vs/config
+/ImageOptimization.Infrastructure/bin/Debug
+/ImageOptimization.Infrastructure/obj/Debug
+/ImageOptimization.Integrations/bin/Debug
+/ImageOptimization.Integrations/obj/Debug
+/ImageOptimization.Web/bin
+/ImageOptimization.Web/obj/Debug
+/Libraries/Sitecore
+/node_modules
+/packages

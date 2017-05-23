@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +50,12 @@
   <ItemGroup>
     <Compile Include="Pipelines\Upload\Save.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageOptimization.Integrations\ImageOptimization.Integrations.csproj">
+      <Project>{9cbded3c-1287-459d-ad5f-a2196fdf9dfb}</Project>
+      <Name>ImageOptimization.Integrations</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

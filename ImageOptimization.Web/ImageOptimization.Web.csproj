@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\ImageOptimization\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\ImageOptimization\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\ImageOptimization\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\ImageOptimization\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -116,8 +117,14 @@
     <Content Include="Global.asax" />
     <Content Include="App_Config\Include\z.ImageOptimization\Pipelines.config" />
     <Content Include="App_Config\Include\z.ImageOptimization\Settings.config" />
-    <Content Include="App_Config\Include\z.ImageOptimization\Serialization.config" />
     <Content Include="App_Config\Include\Rainbow.config" />
+    <Content Include="App_Config\Include\Unicorn\Unicorn.UI.config" />
+    <Content Include="App_Config\Include\Unicorn\Unicorn.Deployed.config.disabled" />
+    <Content Include="App_Config\Include\Unicorn\Unicorn.DataProvider.config" />
+    <Content Include="App_Config\Include\Unicorn\Unicorn.CustomSerializationFolder.config.example" />
+    <None Include="App_Config\Include\Unicorn\Unicorn.Configs.ImageOptimization.config" />
+    <Content Include="App_Config\Include\Unicorn\Unicorn.config" />
+    <Content Include="App_Config\Include\Unicorn\Unicorn.AutoPublish.config" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Web.config" />
   </ItemGroup>
@@ -182,6 +189,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\ImageOptimization\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\ImageOptimization\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\ImageOptimization\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\ImageOptimization\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

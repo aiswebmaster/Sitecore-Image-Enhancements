@@ -1,5 +1,6 @@
 ﻿using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
+using Sitecore.Globalization;
 using Sitecore.IO;
 using Sitecore.Pipelines.Upload;
 using Sitecore.Resources.Media;
@@ -51,21 +52,19 @@ namespace ImageOptimization.Infrastructure.Pipelines.Upload
                         }
                         else
                         {
-                            MediaUploader mediaUploader = new MediaUploader
-                            {
-                                File = httpPostedFile,
-                                Unpack = flag,
-                                Folder = args.Folder,
-                                Versioned = args.Versioned,
-                                Language = args.Language,
-                                AlternateText = args.GetFileParameter(httpPostedFile.FileName, "alt"),
-                                Overwrite = args.Overwrite,
-                                FileBased = (args.Destination == UploadDestination.File)
-                            };
+                            // Attempt to Compress File
+                            byte[] fileData = new byte[httpPostedFile.ContentLength];
+                            var service = new Integrations.TinyPng.Service();
+
+                            httpPostedFile.InputStream.Read(fileData, 0, httpPostedFile.ContentLength);
+
+                            byte[] result = service.OptimizeImage(fileData);
+
                             List<MediaUploadResult> list;
                             using (new SecurityDisabler())
                             {
-                                list = mediaUploader.Upload();
+                                list = UploadMedia(result, args.Folder, args.Versioned, args.Language, args.GetFileParameter(httpPostedFile.FileName, "alt"),
+                                    args.Overwrite, (args.Destination == UploadDestination.File));
                             }
                             Log.Audit(this, "Upload: {0}", new string[]
                             {
@@ -83,6 +82,29 @@ namespace ImageOptimization.Infrastructure.Pipelines.Upload
                         throw;
                     }
                 }
+            }
+        }
+
+        private List<MediaUploadResult> UploadMedia(byte[] fileData, string fileName, bool flag, string folder, bool versioned, Language language, string altText, bool overwrite, bool fileBased)
+        {
+            List<MediaUploadResult> list = new List<MediaUploadResult>();
+
+            bool itemFlag = string.Compare(Path.GetExtension(fileName), ".zip", StringComparison.InvariantCultureIgnoreCase) == 0;
+
+            if (itemFlag)
+            {
+                // Unpack to Database
+                //string text = FileUtil.MapPath(TempFolder.GetFilename("temp.zip"));
+                
+            }
+            else
+            {
+                // Upload to Database
+                MediaUploadResult mediaUploadResult = new MediaUploadResult();
+                list.Add(mediaUploadResult);
+
+                mediaUploadResult.Path = FileUtil.MakePath(folder, Path.GetFileName(fileName), '/');
+
             }
         }
 
@@ -154,14 +176,65 @@ namespace ImageOptimization.Infrastructure.Pipelines.Upload
         {
             Assert.ArgumentNotNull(args, "args");
             Assert.ArgumentNotNull(file, "file");
-            string text = FileUtil.MakePath(args.Folder, Path.GetFileName(file.FileName), '\\');
+            string fileName = FileUtil.MakePath(args.Folder, Path.GetFileName(file.FileName), '\\');
             if (!args.Overwrite)
             {
-                text = FileUtil.GetUniqueFilename(text);
+                fileName = FileUtil.GetUniqueFilename(fileName);
             }
-            file.SaveAs(text);
-            Log.Info("File has been uploaded: " + text, this);
-            return Assert.ResultNotNull<string>(text);
+
+            // Automatically Run Images Against TinyPng
+            if (IsImage(file))
+            {
+                byte[] fileData = null;
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                }
+
+                if (fileData != null)
+                {
+                    var service = new Integrations.TinyPng.Service();
+
+                    var imgBytes = service.OptimizeImage(fileData);
+
+                    using (var ms = new System.IO.MemoryStream(imgBytes))
+                    {
+                        using (var img = System.Drawing.Image.FromStream(ms))
+                        {
+                            img.Save(fileName);
+                        }
+                    }
+                }
+            } else
+            {
+                file.SaveAs(fileName);
+            }
+
+            Log.Info("File has been uploaded: " + fileName, this);
+            return Assert.ResultNotNull<string>(fileName);
+        }
+
+        public static bool IsImage(HttpPostedFile postedFile)
+        {
+            if (postedFile.ContentType.ToLower() != "image/jpg" &&
+                        postedFile.ContentType.ToLower() != "image/jpeg" &&
+                        postedFile.ContentType.ToLower() != "image/pjpeg" &&
+                        postedFile.ContentType.ToLower() != "image/gif" &&
+                        postedFile.ContentType.ToLower() != "image/x-png" &&
+                        postedFile.ContentType.ToLower() != "image/png")
+            {
+                return false;
+            }
+            
+            if (Path.GetExtension(postedFile.FileName).ToLower() != ".jpg"
+                && Path.GetExtension(postedFile.FileName).ToLower() != ".png"
+                && Path.GetExtension(postedFile.FileName).ToLower() != ".gif"
+                && Path.GetExtension(postedFile.FileName).ToLower() != ".jpeg")
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
