@@ -13,3 +13,6 @@
 /Libraries/Sitecore
 /node_modules
 /packages
+/Foundation/ImageCompression/Sitecore.Foundation.ImageCompression/obj/Debug
+*.user
+/Foundation/Serialization/Sitecore.Foundation.Serialization/obj/Debug
