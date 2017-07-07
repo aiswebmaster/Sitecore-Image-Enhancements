@@ -96,6 +96,7 @@
   <ItemGroup>
     <None Include="App_Config\Include\z.Foundation\Sitecore.Foundation.ImageCompression.config" />
     <Content Include="App_Config\Include\z.Foundation\Sitecore.Foundation.ImageCompression.Serialization.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

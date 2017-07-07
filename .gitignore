@@ -16,3 +16,7 @@
 /Foundation/ImageCompression/Sitecore.Foundation.ImageCompression/obj/Debug
 *.user
 /Foundation/Serialization/Sitecore.Foundation.Serialization/obj/Debug
+/Foundation/ImageCompression/Sitecore.Foundation.ImageCompression/bin
+/Foundation/ImageCompression/Sitecore.Foundation.ImageCompression/obj/Release
+/Foundation/Serialization/Sitecore.Foundation.Serialization/bin
+/Foundation/Serialization/Sitecore.Foundation.Serialization/obj/Release
