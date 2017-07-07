@@ -1,20 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{187D05AE-51F6-4297-8E3F-F36BBE4D9A96}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{187D05AE-51F6-4297-8E3F-F36BBE4D9A96}"
 	ProjectSection(SolutionItems) = preProject
 		gulp-config.js = gulp-config.js
 		gulpfile.js = gulpfile.js
 		package.json = package.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageOptimization.Web", "ImageOptimization.Web\ImageOptimization.Web.csproj", "{90C26DEB-C82F-4FEC-AF20-A256615C86A3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{4E2A6310-3CC4-4CE1-B7F8-2053BB7225D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageOptimization.Infrastructure", "ImageOptimization.Infrastructure\ImageOptimization.Infrastructure.csproj", "{9BEBCC2C-959B-4E82-BD34-C6B69DBF50B3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{59443179-DD22-401F-B0B8-DAF5BBCB8C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageOptimization.Integrations", "ImageOptimization.Integrations\ImageOptimization.Integrations.csproj", "{9CBDED3C-1287-459D-AD5F-A2196FDF9DFB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{0B13FC74-9AB2-47ED-B4A6-95C0F2CCFED8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageCompression", "ImageCompression", "{BF0EF456-081C-45CE-A649-9F9ED69BCB70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.Foundation.ImageCompression", "Foundation\ImageCompression\Sitecore.Foundation.ImageCompression\Sitecore.Foundation.ImageCompression.csproj", "{FC84455B-164A-46D1-98AD-2A96E87830C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Serialization", "Serialization", "{92F36BBF-2A31-4B9A-8761-37124CEE7BC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.Foundation.Serialization", "Foundation\Serialization\Sitecore.Foundation.Serialization\Sitecore.Foundation.Serialization.csproj", "{C5CB176E-ACE4-4FFB-A8B5-489B05A83115}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,20 +30,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{90C26DEB-C82F-4FEC-AF20-A256615C86A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90C26DEB-C82F-4FEC-AF20-A256615C86A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90C26DEB-C82F-4FEC-AF20-A256615C86A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90C26DEB-C82F-4FEC-AF20-A256615C86A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BEBCC2C-959B-4E82-BD34-C6B69DBF50B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BEBCC2C-959B-4E82-BD34-C6B69DBF50B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BEBCC2C-959B-4E82-BD34-C6B69DBF50B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BEBCC2C-959B-4E82-BD34-C6B69DBF50B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CBDED3C-1287-459D-AD5F-A2196FDF9DFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CBDED3C-1287-459D-AD5F-A2196FDF9DFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CBDED3C-1287-459D-AD5F-A2196FDF9DFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CBDED3C-1287-459D-AD5F-A2196FDF9DFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC84455B-164A-46D1-98AD-2A96E87830C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC84455B-164A-46D1-98AD-2A96E87830C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC84455B-164A-46D1-98AD-2A96E87830C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC84455B-164A-46D1-98AD-2A96E87830C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5CB176E-ACE4-4FFB-A8B5-489B05A83115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5CB176E-ACE4-4FFB-A8B5-489B05A83115}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5CB176E-ACE4-4FFB-A8B5-489B05A83115}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5CB176E-ACE4-4FFB-A8B5-489B05A83115}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BF0EF456-081C-45CE-A649-9F9ED69BCB70} = {4E2A6310-3CC4-4CE1-B7F8-2053BB7225D2}
+		{FC84455B-164A-46D1-98AD-2A96E87830C5} = {BF0EF456-081C-45CE-A649-9F9ED69BCB70}
+		{92F36BBF-2A31-4B9A-8761-37124CEE7BC3} = {4E2A6310-3CC4-4CE1-B7F8-2053BB7225D2}
+		{C5CB176E-ACE4-4FFB-A8B5-489B05A83115} = {92F36BBF-2A31-4B9A-8761-37124CEE7BC3}
 	EndGlobalSection
 EndGlobal
