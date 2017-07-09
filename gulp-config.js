@@ -1,5 +1,5 @@
 module.exports = function () {
-    var sitecoreRoot = "C:\\Development\\Sandbox-82";
+    var sitecoreRoot = "C:\\Sitecore\\Sandbox-82";
     var config = {
         websiteRoot: sitecoreRoot + "\\Website",
         sitecoreLibraries: sitecoreRoot + "\\Website\\bin",

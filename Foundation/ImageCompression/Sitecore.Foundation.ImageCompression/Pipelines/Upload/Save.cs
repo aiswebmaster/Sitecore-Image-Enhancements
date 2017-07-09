@@ -1,8 +1,5 @@
-﻿using Sitecore.Data;
-using Sitecore.Data.Items;
+﻿using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
-using Sitecore.Foundation.ImageCompression.Integrations;
-using Sitecore.Foundation.ImageCompression.Integrations.TinyPng;
 using Sitecore.IO;
 using Sitecore.Pipelines.GetMediaCreatorOptions;
 using Sitecore.Pipelines.Upload;
@@ -11,7 +8,6 @@ using Sitecore.SecurityModel;
 using Sitecore.Web;
 using Sitecore.Zip;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Web;
 
@@ -19,11 +15,11 @@ namespace Sitecore.Foundation.ImageCompression.Pipelines.Upload
 {
     public class Save : UploadProcessor
     {
-        private readonly IService _compressionService;
+        private readonly ImageCompressionManager _compressionManager;
 
         public Save()
         {
-            _compressionService = new Service();
+            _compressionManager = new ImageCompressionManager();
         }
 
         public void Process(UploadArgs args)
@@ -54,6 +50,7 @@ namespace Sitecore.Foundation.ImageCompression.Pipelines.Upload
                         else
                         {
                             byte[] fileData = null;
+                            file.InputStream.Position = 0;
                             using (var binaryReader = new BinaryReader(file.InputStream))
                             {
                                 fileData = binaryReader.ReadBytes(file.ContentLength);
@@ -65,20 +62,20 @@ namespace Sitecore.Foundation.ImageCompression.Pipelines.Upload
                                 return;
                             }
 
-                            byte[] compressedBytes = _compressionService.OptimizeImage(fileData);
+                            byte[] compressedBytes = _compressionManager.OptimizeImage(fileData);
 
-                            List<Sitecore.Resources.Media.MediaUploadResult> mediaUploadResultList;
+                            //List<Sitecore.Resources.Media.MediaUploadResult> mediaUploadResultList;
 
                             using (new SecurityDisabler())
-                                mediaUploadResultList = Upload(file, compressedBytes, flag, args, (args.Destination == UploadDestination.File));
+                                Upload(file, compressedBytes, flag, args, (args.Destination == UploadDestination.File));
 
                             Log.Audit((object)this, "Upload: {0}", new string[1]
                             {
                                 file.FileName
                             });
 
-                            foreach (Sitecore.Resources.Media.MediaUploadResult mediaUploadResult in mediaUploadResultList)
-                                this.ProcessItem(args, (MediaItem)mediaUploadResult.Item, mediaUploadResult.Path);
+                            //foreach (Sitecore.Resources.Media.MediaUploadResult mediaUploadResult in mediaUploadResultList)
+                            //    this.ProcessItem(args, (MediaItem)mediaUploadResult.Item, mediaUploadResult.Path);
                         }
                     }
                     catch (Exception ex)
@@ -90,28 +87,46 @@ namespace Sitecore.Foundation.ImageCompression.Pipelines.Upload
             }
         }
 
-        private List<Resources.Media.MediaUploadResult> Upload(HttpPostedFile originalFile, byte[] optimizedImage, bool isUnpack, UploadArgs args, bool isFileBased)
+        private void Upload(HttpPostedFile originalFile, byte[] optimizedImage, bool isUnpack, UploadArgs args, bool isFileBased)
         {
-            var collection = new List<MediaUploadResult>();
-            //if (string.Compare(Path.GetExtension(this.File.FileName), ".zip", StringComparison.InvariantCultureIgnoreCase) == 0 && Unpack)
-            //{
-            //    UnpackToDatabase(collection);
-            //} else
-            //{
-                UploadToDatabase(originalFile, new MemoryStream(optimizedImage), isUnpack, args, isFileBased);
-            //}                
-
-            return collection;
+            if (string.Compare(Path.GetExtension(originalFile.FileName), ".zip", StringComparison.InvariantCultureIgnoreCase) == 0 && isUnpack)
+            {
+                UnpackToDatabase(originalFile, args, isFileBased);
+            }
+            else
+            {
+                UploadToDatabase(originalFile.FileName, new MemoryStream(optimizedImage), args, isFileBased);
+            }
         }
 
-        private void UnpackToDatabase(List<MediaUploadResult> collection)
+        private void UnpackToDatabase(HttpPostedFile originalFile, UploadArgs args, bool isFileBased)
         {
-            throw new NotImplementedException();
+            string str = FileUtil.MapPath(TempFolder.GetFilename("temp.zip"));
+
+            originalFile.SaveAs(str);
+
+            try
+            {
+                using (ZipReader zipReader = new ZipReader(str))
+                {
+                    foreach (ZipEntry entry in zipReader.Entries)
+                    {
+                        if (!entry.IsDirectory)
+                        {
+                            UploadToDatabase(entry.Name, (MemoryStream)entry.GetStream(), args, isFileBased);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                FileUtil.Delete(str);
+            }
         }
 
-        private void UploadToDatabase(HttpPostedFile originalFile, MemoryStream optimizedImage, bool isUnpack, UploadArgs args, bool isFileBased)
+        private void UploadToDatabase(string fileName, MemoryStream optimizedImage, UploadArgs args, bool isFileBased)
         {
-            string validPath = FileUtil.MakePath(args.Folder, Path.GetFileName(originalFile.FileName), '/');
+            string validPath = FileUtil.MakePath(args.Folder, Path.GetFileName(fileName), '/');
             string validMediaPath = MediaPathManager.ProposeValidMediaPath(validPath);
             Item createdItem = null;
 
@@ -122,8 +137,8 @@ namespace Sitecore.Foundation.ImageCompression.Pipelines.Upload
                 OverwriteExisting = !args.Overwrite,
                 Destination = validMediaPath,
                 FileBased = isFileBased,
-                AlternateText = args.GetFileParameter(originalFile.FileName, "alt"),
-                Database = null     // if null, then either ContentDatabase or Database from Context
+                AlternateText = args.GetFileParameter(fileName, "alt"),
+                Database = null,
             };
 
             options.Build(GetMediaCreatorOptionsArgs.UploadContext);

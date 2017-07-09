@@ -94,14 +94,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\z.Foundation\Sitecore.Foundation.ImageCompression.config" />
-    <Content Include="App_Config\Include\z.Foundation\Sitecore.Foundation.ImageCompression.Serialization.config" />
+    <Content Include="App_Config\Include\z.Foundation\Sitecore.Foundation.ImageCompression.config" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Integrations\IService.cs" />
-    <Compile Include="Integrations\TinyPng\Service.cs" />
+    <Compile Include="ImageCompressionManager.cs" />
+    <Compile Include="ImageCompressionProvider.cs" />
+    <Compile Include="ImageCompressionProviderCollection.cs" />
+    <Compile Include="ImageCompressionSwitcher.cs" />
+    <Compile Include="Providers\TinyPngImageCompressionProvider.cs" />
     <Compile Include="Pipelines\Upload\Save.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
